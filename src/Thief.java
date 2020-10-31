@@ -72,6 +72,13 @@ public class Thief extends Actor{
         this.direction = (this.direction - 1 + 4) % 4;
     }
 
+    private void followSign(int direction, Actor actor) {
+        Sign sign = (Sign) actor;
+        if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
+            this.setDirection(direction);
+        }
+    }
+
 
     @Override
     public void update() {
@@ -92,26 +99,6 @@ public class Thief extends Actor{
             }
         }
 
-        for (SignRight sign : ShadowLife.signRightArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(RIGHT);
-            }
-        }
-        for (SignLeft sign : ShadowLife.signLeftArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(LEFT);
-            }
-        }
-        for (SignUp sign : ShadowLife.signUpArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(UP);
-            }
-        }
-        for (SignDown sign : ShadowLife.signDownArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(DOWN);
-            }
-        }
 
         for (Actor actor : ShadowLife.actorList) {
 
@@ -191,6 +178,21 @@ public class Thief extends Actor{
                 }
             }
 
+            if (actor.type.equals("SignLeft")) {
+                this.followSign(LEFT, actor);
+            }
+
+            if (actor.type.equals("SignRight")) {
+                this.followSign(RIGHT, actor);
+            }
+
+            if (actor.type.equals("SignUp")) {
+                this.followSign(UP, actor);
+            }
+
+            if (actor.type.equals("SignDown")) {
+                this.followSign(DOWN, actor);
+            }
         }
 
         for (Actor actor : ShadowLife.actorList) {
@@ -221,5 +223,7 @@ public class Thief extends Actor{
         }
 
     }
+
+
 
 }

@@ -48,10 +48,6 @@ public class ShadowLife extends AbstractGame {
      */
 
     public static ArrayList<Actor> actorList = new ArrayList<>();
-    public static ArrayList<SignDown> signDownArrayList = new ArrayList<>();
-    public static ArrayList<SignUp> signUpArrayList = new ArrayList<>();
-    public static ArrayList<SignRight> signRightArrayList = new ArrayList<>();
-    public static ArrayList<SignLeft> signLeftArrayList = new ArrayList<>();
 
     public static void addToTotalGatherers() {
         totalGatherers++;
@@ -113,20 +109,17 @@ public class ShadowLife extends AbstractGame {
                         actorList.add(new Fence(x,y));
                         break;
                     case SignLeft.TYPE:
-                        signLeftArrayList.add(new SignLeft(x, y));
-                        actorList.add(new SignLeft(x,y));
+                        //signLeftArrayList.add(new SignLeft(x, y));
+                        actorList.add(new Sign("res/images/left.png", "SignLeft", x, y));
                         break;
                     case SignRight.TYPE:
-                        signRightArrayList.add(new SignRight(x,y));
-                        actorList.add(new SignRight(x,y));
+                        actorList.add(new Sign("res/images/right.png", "SignRight", x, y));
                         break;
                     case SignUp.TYPE:
-                        signUpArrayList.add(new SignUp(x,y));
-                        actorList.add(new SignUp(x,y));
+                        actorList.add(new Sign("res/images/up.png", "SignUp", x,y));
                         break;
                     case SignDown.TYPE:
-                        signDownArrayList.add(new SignDown(x,y));
-                        actorList.add(new SignDown(x,y));
+                        actorList.add(new Sign("res/images/down.png", "SignDown", x,y));
                         break;
                     case Pool.TYPE:
                         actorList.add(new Pool(x,y));

@@ -27,7 +27,7 @@ public class Gatherer extends Actor {
         return this.active;
     }
 
-    private void setDirection(int direction){
+    public void setDirection(int direction){
         this.direction = direction;
     }
 
@@ -55,6 +55,14 @@ public class Gatherer extends Actor {
         }
     }
 
+    private void followSign(int direction, Actor actor) {
+        Sign sign = (Sign) actor;
+        if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
+            this.setDirection(direction);
+        }
+    }
+
+
     @Override
     public void update() {
         if (this.active) {
@@ -71,27 +79,6 @@ public class Gatherer extends Actor {
                 case RIGHT:
                     move(ShadowLife.TILE_SIZE, 0);
                     break;
-            }
-        }
-
-        for (SignRight sign: ShadowLife.signRightArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(RIGHT);
-            }
-        }
-        for (SignLeft sign: ShadowLife.signLeftArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(LEFT);
-            }
-        }
-        for (SignUp sign: ShadowLife.signUpArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(UP);
-            }
-        }
-        for (SignDown sign: ShadowLife.signDownArrayList) {
-            if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
-                setDirection(DOWN);
             }
         }
 
@@ -137,6 +124,22 @@ public class Gatherer extends Actor {
                     }
                     this.rotateOneEighty(this.getDirection());
                 }
+            }
+
+            if (actor.type.equals("SignLeft")) {
+                this.followSign(LEFT, actor);
+            }
+
+            if (actor.type.equals("SignRight")) {
+                this.followSign(RIGHT, actor);
+            }
+
+            if (actor.type.equals("SignUp")) {
+                this.followSign(UP, actor);
+            }
+
+            if (actor.type.equals("SignDown")) {
+                this.followSign(DOWN, actor);
             }
 
         }
