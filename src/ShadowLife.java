@@ -108,17 +108,16 @@ public class ShadowLife extends AbstractGame {
                     case Fence.TYPE:
                         actorList.add(new Fence(x,y));
                         break;
-                    case SignLeft.TYPE:
-                        //signLeftArrayList.add(new SignLeft(x, y));
+                    case Sign.TYPE_LEFT:
                         actorList.add(new Sign("res/images/left.png", "SignLeft", x, y));
                         break;
-                    case SignRight.TYPE:
+                    case Sign.TYPE_RIGHT:
                         actorList.add(new Sign("res/images/right.png", "SignRight", x, y));
                         break;
-                    case SignUp.TYPE:
+                    case Sign.TYPE_UP:
                         actorList.add(new Sign("res/images/up.png", "SignUp", x,y));
                         break;
-                    case SignDown.TYPE:
+                    case Sign.TYPE_DOWN:
                         actorList.add(new Sign("res/images/down.png", "SignDown", x,y));
                         break;
                     case Pool.TYPE:
