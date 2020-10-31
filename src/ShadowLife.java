@@ -32,11 +32,14 @@ public class ShadowLife extends AbstractGame {
     private long lastTick = 0;
     private static long TICK_TIME;
     private static long MAX_TICKS;
-    private Actor[] actors;
-    private static int totalGathererActive = 0;
-    private static int totalThiefActive = 0;
     private static int tickTracker = 0;
+
+    private static int totalGatherers = 0;
+    private static int totalGathererActive = 0;
     private static int gathererTicks = 0;
+
+    private static int totalThieves = 0;
+    private static int totalThiefActive = 0;
     private static int thiefTicks = 0;
     private final Image background = new Image("res/images/background.png");
 
@@ -45,19 +48,20 @@ public class ShadowLife extends AbstractGame {
      */
 
     public static ArrayList<Actor> actorList = new ArrayList<>();
-    public static ArrayList<GoldenTree> goldenTreeArrayList = new ArrayList<>();
-    public static ArrayList<Pad> padArrayList = new ArrayList<>();
-    public static ArrayList<Thief> thiefArrayList = new ArrayList<>();
-    public static ArrayList<Hoard> hoardArrayList = new ArrayList<>();
-    public static ArrayList<Stockpile> stockpileArrayList = new ArrayList<>();
-    public static ArrayList<Gatherer> gathererArrayList = new ArrayList<>();
-    public static ArrayList<Fence> fences = new ArrayList<>();
     public static ArrayList<SignDown> signDownArrayList = new ArrayList<>();
     public static ArrayList<SignUp> signUpArrayList = new ArrayList<>();
     public static ArrayList<SignRight> signRightArrayList = new ArrayList<>();
     public static ArrayList<SignLeft> signLeftArrayList = new ArrayList<>();
-    public static ArrayList<Tree> treeArrayList = new ArrayList<>();
 
+    public static void addToTotalGatherers() {
+        totalGatherers++;
+        totalGathererActive++;
+    }
+
+    public static void addToTotalThieves() {
+        totalThieves++;
+        totalThiefActive++;
+    }
 
     private static void setTickTime(long tickTime) {
         TICK_TIME = tickTime;
@@ -67,9 +71,7 @@ public class ShadowLife extends AbstractGame {
         MAX_TICKS = maxTicks;
     }
 
-
     private void loadActors() {
-        int count = 0;
 
         String[] commands = argsFromFile();
         if (commands.length != 3) { exitShadowLife(); }
@@ -83,9 +85,6 @@ public class ShadowLife extends AbstractGame {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(worldFile))) {
 
-            int size = (int) Files.lines(Path.of(worldFile)).count();
-            actors = new Actor[size];
-
             String line;
             while ((line = reader.readLine()) != null) {
                 // Line format is: type,x,y
@@ -96,76 +95,51 @@ public class ShadowLife extends AbstractGame {
 
                 switch (type) {
                     case Tree.TYPE:
-                        treeArrayList.add(new Tree(x,y));
                         actorList.add(new Tree(x,y));
                         break;
                     case GoldenTree.TYPE:
-                        goldenTreeArrayList.add(new GoldenTree(x, y));
                         actorList.add(new GoldenTree(x,y));
                         break;
                     case Stockpile.TYPE:
-                        stockpileArrayList.add(new Stockpile(x, y));
-                        //actorList.add(new Stockpile(x,y));
+                        actorList.add(new Stockpile(x,y));
                         break;
                     case Hoard.TYPE:
-                        hoardArrayList.add(new Hoard(x, y));
-                       // count++;
-
-                        //actorList.add(new Hoard(x,y));
+                        actorList.add(new Hoard(x,y));
                         break;
                     case Pad.TYPE:
-                        padArrayList.add(new Pad(x, y));
-                        //actors[count++] = new Pad(x, y);
-
                         actorList.add(new Pad(x,y));
                         break;
                     case Fence.TYPE:
-                        //actors[count++] = new Fence(x, y);
-                        fences.add(new Fence(x, y));
-
                         actorList.add(new Fence(x,y));
                         break;
                     case SignLeft.TYPE:
-                        //actors[count++] = new SignLeft(x, y);
                         signLeftArrayList.add(new SignLeft(x, y));
-
                         actorList.add(new SignLeft(x,y));
                         break;
                     case SignRight.TYPE:
-                        //actors[count++] = new SignRight(x, y);
                         signRightArrayList.add(new SignRight(x,y));
-
                         actorList.add(new SignRight(x,y));
                         break;
                     case SignUp.TYPE:
-                        //actors[count++] = new SignUp(x, y);
                         signUpArrayList.add(new SignUp(x,y));
-
                         actorList.add(new SignUp(x,y));
                         break;
                     case SignDown.TYPE:
-                        //actors[count++] = new SignDown(x, y);
                         signDownArrayList.add(new SignDown(x,y));
-
                         actorList.add(new SignDown(x,y));
                         break;
                     case Pool.TYPE:
-                        //actors[count++] = new Pool(x, y);
-
                         actorList.add(new Pool(x,y));
                         break;
                     case Gatherer.TYPE:
-                        //count++;
+                        actorList.add(new Gatherer(x,y));
+                        totalGatherers++;
                         totalGathererActive++;
-                        gathererArrayList.add(new Gatherer(x, y));
-
-                        //actorList.add(new Gatherer(x,y));
                         break;
                     case Thief.TYPE:
-                        thiefArrayList.add(new Thief(x, y));
+                        actorList.add(new Thief(x,y));
+                        totalThieves++;
                         totalThiefActive++;
-
-                        //actorList.add(new Thief(x,y));
                         break;
                 }
             }
@@ -194,25 +168,20 @@ public class ShadowLife extends AbstractGame {
         if (System.currentTimeMillis() - lastTick > TICK_TIME) {
             lastTick = System.currentTimeMillis();
 
-            for (Actor actor : actors) {
-                if (actor != null) {
-                    actor.tick();
-                }
-            }
+            for (Actor actor : actorList) {
 
-            for (Gatherer gatherer : gathererArrayList) {
-                if (gatherer != null) {
+                if (actor.type.equals("Gatherer")) {
+                    Gatherer gatherer = (Gatherer) actor;
                     if(!gatherer.isActive()) {
                         totalGathererActive--;
                         continue;
                     }
                     gatherer.tick();
                     gathererTicks++;
-
                 }
-            }
-            for (Thief thief : thiefArrayList) {
-                if (thief != null) {
+
+                if (actor.type.equals("Thief")) {
+                    Thief thief = (Thief) actor;
                     if(!thief.isActive()){
                         totalThiefActive--;
                         continue;
@@ -220,40 +189,21 @@ public class ShadowLife extends AbstractGame {
                     thief.tick();
                     thiefTicks++;
                 }
+
             }
+
         }
 
         // Draw all the actors, the number of fruits and thief's status
         background.drawFromTopLeft(0, 0);
+
         for (Actor actor : actorList) {
-            if(actor.type.equals("Tree")){
-                actor.render();
+            actor.render();
+            if (actor.type.equals("Tree") || actor.type.equals("Stockpile") || actor.type.equals("Hoard")){
                 actor.update();
             }
-            actor.render();
-
-        }
-
-        for (Stockpile stock : stockpileArrayList){
-            if (stock != null) {
-                stock.render();
-                stock.update();
-            }
-        }
-        for (Hoard hoard : hoardArrayList){
-            if (hoard != null) {
-                hoard.render();
-                hoard.update();
-            }
-        }
-        for (Gatherer gatherer : gathererArrayList) {
-            if (gatherer != null) {
-                gatherer.render();
-            }
-        }
-        for (Thief thief : thiefArrayList) {
-            if (thief != null) {
-                thief.render();
+            if (actor.type.equals("Thief")) {
+                Thief thief = (Thief) actor;
                 thief.renderStatus();
             }
         }
@@ -263,21 +213,31 @@ public class ShadowLife extends AbstractGame {
     public static void main(String[] args) {
         new ShadowLife().run();
         int tickToPrint = 1;
-        if (thiefArrayList.size() > 0 && gathererArrayList.size() > 0) {
-            tickToPrint += Math.max(thiefTicks / thiefArrayList.size(), gathererTicks / gathererArrayList.size());
-        } else if (thiefArrayList.size() > 0) {
-            tickToPrint +=  thiefTicks / thiefArrayList.size();
-        } else if (gathererArrayList.size() > 0) {
-            tickToPrint += gathererTicks / gathererArrayList.size();
+        if (totalThieves > 0 && totalGatherers > 0) {
+            tickToPrint += Math.max(thiefTicks / totalThieves, gathererTicks / totalGatherers);
+        } else if (totalThieves > 0) {
+            tickToPrint +=  thiefTicks / totalThieves;
+        } else if (totalGatherers > 0) {
+            tickToPrint += gathererTicks / totalGatherers;
         } else {
             tickToPrint = 0;
         }
+
         System.out.println(tickToPrint + " ticks");
-        for(Hoard hoard: hoardArrayList){
-            System.out.println(hoard.getFruit());
+
+        for (Actor actor : ShadowLife.actorList) {
+            if (actor.type.equals("Stockpile")) {
+                Stockpile stockpile = (Stockpile) actor;
+                System.out.println(stockpile.getFruit());
+            }
+
         }
-        for(Stockpile stockpile: stockpileArrayList){
-            System.out.println(stockpile.getFruit());
+
+        for (Actor actor : ShadowLife.actorList) {
+            if (actor.type.equals("Hoard")) {
+                Hoard hoard = (Hoard) actor;
+                System.out.println(hoard.getFruit());
+            }
         }
     }
 

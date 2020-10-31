@@ -113,26 +113,8 @@ public class Thief extends Actor{
             }
         }
 
-        for (Pad pad : ShadowLife.padArrayList) {
-            if (this.getX() == pad.getX() && this.getY() == pad.getY()) {
-                this.consuming = true;
-            }
-        }
-
-        for (Gatherer gatherer : ShadowLife.gathererArrayList) {
-            if(this.getX() == gatherer.getX() && this.getY() == gatherer.getY() && !gatherer.isActive()) {
-                this.rotateTwoSeventy(this.getDirection());
-            }
-        }
-
-        for (GoldenTree goldenTree : ShadowLife.goldenTreeArrayList) {
-            if (this.getX() == goldenTree.getX() && this.getY() == goldenTree.getY()) {
-                this.consuming = false;
-                this.carrying = true;
-            }
-        }
-
         for (Actor actor : ShadowLife.actorList) {
+
             if (actor.type.equals("Tree")) {
                 Tree tree = (Tree) actor;
                 if (this.getX() == tree.getX() && this.getY() == tree.getY() && !this.carrying) {
@@ -143,73 +125,100 @@ public class Thief extends Actor{
                 }
 
             }
-        }
 
-        for (Hoard hoard : ShadowLife.hoardArrayList) {
-            if (this.getX() == hoard.getX() && this.getY() == hoard.getY()) {
-                if (this.consuming) {
+            if (actor.type.equals("GoldenTree")) {
+                GoldenTree goldenTree = (GoldenTree) actor;
+                if (this.getX() == goldenTree.getX() && this.getY() == goldenTree.getY()) {
                     this.consuming = false;
-                    if (!this.carrying) {
-                        if (hoard.getFruit() > 0) {
+                    this.carrying = true;
+                }
+            }
+
+            if (actor.type.equals("Pad")) {
+                Pad pad = (Pad) actor;
+                if (this.getX() == pad.getX() && this.getY() == pad.getY()) {
+                    this.consuming = true;
+                }
+            }
+
+            if (actor.type.equals("Stockpile")) {
+                Stockpile stockpile = (Stockpile) actor;
+                if(this.getX() == stockpile.getX() && this.getY() == stockpile.getY()) {
+                    if(!this.carrying) {
+                        if (stockpile.getFruit() > 0) {
                             this.carrying = true;
-                            hoard.setFruit(hoard.getFruit() - 1);
-                        } else {
+                            this.consuming = false;
+                            stockpile.setFruit(stockpile.getFruit() - 1);
                             this.moveClockwise();
                         }
-                    }
 
-                } else if (this.carrying) {
-                    // rotate direction by 90 degree clockwise
-
-                    this.moveClockwise();
-
-                    hoard.setFruit(hoard.getFruit() + 1);
-                    this.carrying = false;
-
-                }
-            }
-        }
-
-        for (Stockpile stockpile : ShadowLife.stockpileArrayList) {
-            if(this.getX() == stockpile.getX() && this.getY() == stockpile.getY()) {
-                if(!this.carrying) {
-                    if (stockpile.getFruit() > 0) {
-                        this.carrying = true;
-                        this.consuming = false;
-                        stockpile.setFruit(stockpile.getFruit() - 1);
+                    } else {
                         this.moveClockwise();
                     }
-
-                } else {
-                    this.moveClockwise();
-                }
-            }
-        }
-
-        for (Fence fence : ShadowLife.fences) {
-            if (this.getX() == fence.getX()) {
-
-                if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
-                } else if (this.getDirection() == DOWN && (fence.getY() - this.getY()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
-                }
-            } else if (this.getY() == fence.getY()) {
-
-                if (this.getDirection() == RIGHT && (fence.getX() - this.getX()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
-                }
-                if (this.getDirection() == LEFT && (this.getX() - fence.getX()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
                 }
             }
 
+            if (actor.type.equals("Hoard")) {
+                Hoard hoard = (Hoard) actor;
+                if (this.getX() == hoard.getX() && this.getY() == hoard.getY()) {
+                    if (this.consuming) {
+                        this.consuming = false;
+                        if (!this.carrying) {
+                            if (hoard.getFruit() > 0) {
+                                this.carrying = true;
+                                hoard.setFruit(hoard.getFruit() - 1);
+                            } else {
+                                this.moveClockwise();
+                            }
+                        }
+
+                    } else if (this.carrying) {
+                        // rotate direction by 90 degree clockwise
+
+                        this.moveClockwise();
+
+                        hoard.setFruit(hoard.getFruit() + 1);
+                        this.carrying = false;
+
+                    }
+                }
+            }
+
+            if (actor.type.equals("Gatherer")) {
+                Gatherer gatherer = (Gatherer) actor;
+                if(this.getX() == gatherer.getX() && this.getY() == gatherer.getY() && !gatherer.isActive()) {
+                    this.rotateTwoSeventy(this.getDirection());
+                }
+            }
+
         }
 
+        for (Actor actor : ShadowLife.actorList) {
+            if (actor.type.equals("Fence")) {
+                Fence fence = (Fence) actor;
+                if (this.getX() == fence.getX()) {
+
+                    if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    } else if (this.getDirection() == DOWN && (fence.getY() - this.getY()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    }
+                } else if (this.getY() == fence.getY()) {
+
+                    if (this.getDirection() == RIGHT && (fence.getX() - this.getX()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    }
+                    if (this.getDirection() == LEFT && (this.getX() - fence.getX()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    }
+                }
+
+            }
+        }
 
     }
 

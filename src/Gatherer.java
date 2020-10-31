@@ -107,52 +107,64 @@ public class Gatherer extends Actor {
                     }
                 }
             }
-        }
 
-
-        for (Stockpile stockpile : ShadowLife.stockpileArrayList) {
-            if(this.getX() == stockpile.getX() && this.getY() == stockpile.getY()) {
-                if(this.carrying) {
-                    this.carrying = false;
-                    stockpile.setFruit(stockpile.getFruit() + 1);
-
+            if (actor.type.equals("GoldenTree")) {
+                GoldenTree goldenTree = (GoldenTree) actor;
+                if (this.getX() == goldenTree.getX() && this.getY() == goldenTree.getY()) {
+                    this.carrying = true;
                 }
-                this.rotateOneEighty(this.getDirection());
             }
-        }
 
-        for (Hoard hoard : ShadowLife.hoardArrayList) {
-            if(this.getX() == hoard.getX() && this.getY() == hoard.getY()) {
-                if(this.carrying) {
-                    this.carrying = false;
-                    hoard.setFruit(hoard.getFruit() + 1);
+            if (actor.type.equals("Stockpile")) {
+                Stockpile stockpile = (Stockpile) actor;
+                if(this.getX() == stockpile.getX() && this.getY() == stockpile.getY()) {
+                    if(this.carrying) {
+                        this.carrying = false;
+                        stockpile.setFruit(stockpile.getFruit() + 1);
 
+                    }
+                    this.rotateOneEighty(this.getDirection());
                 }
-                this.rotateOneEighty(this.getDirection());
             }
+
+            if (actor.type.equals("Hoard")) {
+                Hoard hoard = (Hoard) actor;
+                if(this.getX() == hoard.getX() && this.getY() == hoard.getY()) {
+                    if(this.carrying) {
+                        this.carrying = false;
+                        hoard.setFruit(hoard.getFruit() + 1);
+
+                    }
+                    this.rotateOneEighty(this.getDirection());
+                }
+            }
+
         }
 
+        for (Actor actor : ShadowLife.actorList) {
+            if (actor.type.equals("Fence")) {
+                Fence fence = (Fence) actor;
+                if(this.getX() == fence.getX()){
 
-        for (Fence fence: ShadowLife.fences) {
-            if(this.getX() == fence.getX()){
+                    if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    } else if(this.getDirection() == DOWN && (fence.getY() - this.getY()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    }
+                } else if (this.getY() == fence.getY()) {
 
-                if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
-                } else if(this.getDirection() == DOWN && (fence.getY() - this.getY()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
+                    if(this.getDirection() == RIGHT && (fence.getX() - this.getX()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    }
+                    if(this.getDirection() == LEFT && (this.getX() - fence.getX()) == ShadowLife.TILE_SIZE) {
+                        this.active = false;
+                        break;
+                    }
                 }
-            } else if (this.getY() == fence.getY()) {
 
-                if(this.getDirection() == RIGHT && (fence.getX() - this.getX()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
-                }
-                if(this.getDirection() == LEFT && (this.getX() - fence.getX()) == ShadowLife.TILE_SIZE) {
-                    this.active = false;
-                    break;
-                }
             }
 
         }
