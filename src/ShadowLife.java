@@ -70,6 +70,7 @@ public class ShadowLife extends AbstractGame {
     private void loadActors() {
 
         String[] commands = argsFromFile();
+        assert commands != null;
         if (commands.length != 3) { exitShadowLife(); }
 
         setTickTime(Integer.parseInt(commands[0]));
@@ -90,11 +91,11 @@ public class ShadowLife extends AbstractGame {
                 int y = Integer.parseInt(parts[2]);
 
                 switch (type) {
-                    case Tree.TYPE:
-                        actorList.add(new Tree(x,y));
+                    case Tree.TYPE_TREE:
+                        actorList.add(new Tree("res/images/tree.png", "Tree", x ,y));
                         break;
-                    case GoldenTree.TYPE:
-                        actorList.add(new GoldenTree(x,y));
+                    case Tree.TYPE_Golden_Tree:
+                        actorList.add(new Tree("res/images/gold-tree.png", "GoldenTree",x ,y));
                         break;
                     case Stockpile.TYPE:
                         actorList.add(new Stockpile(x,y));
@@ -102,23 +103,23 @@ public class ShadowLife extends AbstractGame {
                     case Hoard.TYPE:
                         actorList.add(new Hoard(x,y));
                         break;
-                    case Pad.TYPE:
-                        actorList.add(new Pad(x,y));
+                    case NonLivingActor.TYPE_PAD:
+                        actorList.add(new NonLivingActor("res/images/pad.png", "Pad", x, y));
                         break;
-                    case Fence.TYPE:
-                        actorList.add(new Fence(x,y));
+                    case NonLivingActor.TYPE_FENCE:
+                        actorList.add(new NonLivingActor("res/images/fence.png", "Fence", x ,y));
                         break;
-                    case Sign.TYPE_LEFT:
-                        actorList.add(new Sign("res/images/left.png", "SignLeft", x, y));
+                    case NonLivingActor.TYPE_LEFT:
+                        actorList.add(new NonLivingActor("res/images/left.png", "SignLeft", x, y));
                         break;
-                    case Sign.TYPE_RIGHT:
-                        actorList.add(new Sign("res/images/right.png", "SignRight", x, y));
+                    case NonLivingActor.TYPE_RIGHT:
+                        actorList.add(new NonLivingActor("res/images/right.png", "SignRight", x, y));
                         break;
-                    case Sign.TYPE_UP:
-                        actorList.add(new Sign("res/images/up.png", "SignUp", x,y));
+                    case NonLivingActor.TYPE_UP:
+                        actorList.add(new NonLivingActor("res/images/up.png", "SignUp", x,y));
                         break;
-                    case Sign.TYPE_DOWN:
-                        actorList.add(new Sign("res/images/down.png", "SignDown", x,y));
+                    case NonLivingActor.TYPE_DOWN:
+                        actorList.add(new NonLivingActor("res/images/down.png", "SignDown", x,y));
                         break;
                     case Pool.TYPE:
                         actorList.add(new Pool(x,y));
@@ -164,7 +165,7 @@ public class ShadowLife extends AbstractGame {
 
                 if (actor.type.equals("Gatherer")) {
                     Gatherer gatherer = (Gatherer) actor;
-                    if(!gatherer.isActive()) {
+                    if(gatherer.isActive()) {
                         totalGathererActive--;
                         continue;
                     }
@@ -174,7 +175,7 @@ public class ShadowLife extends AbstractGame {
 
                 if (actor.type.equals("Thief")) {
                     Thief thief = (Thief) actor;
-                    if(!thief.isActive()){
+                    if(thief.isActive()){
                         totalThiefActive--;
                         continue;
                     }

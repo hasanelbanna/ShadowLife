@@ -1,6 +1,6 @@
 import bagel.Font;
 
-public class Thief extends Actor{
+public class Thief extends Actor implements Movable {
 
     public static final String TYPE = "Thief";
     private int direction;
@@ -27,26 +27,24 @@ public class Thief extends Actor{
 
     }
 
-    public void renderStatus(){
-        if (this.carrying) {
-            this.status.drawString("carrying", this.getX(), this.getY());
-        }
-
-        if (this.consuming) {
-            this.status.drawString("consuming", this.getX(), this.getY());
-        }
+    public boolean isActive() {
+        return !this.active;
     }
 
-    public boolean isActive() {
-        return this.active;
+    public int getDirection(){
+        return this.direction;
     }
 
     private void setDirection(int direction){
         this.direction = direction;
     }
 
-    public int getDirection(){
-        return this.direction;
+    public void rotateNinetyClockwise(){
+        this.direction = (this.direction + 1) % 4;
+    }
+
+    public void rotateNinetyAntiClockwise(){
+        this.direction = (this.direction - 1 + 4) % 4;
     }
 
     private void rotateTwoSeventy(int direction){
@@ -64,24 +62,26 @@ public class Thief extends Actor{
         }
     }
 
-    public void moveClockwise(){
-        this.direction = (this.direction + 1) % 4;
-    }
-
-    public void moveAntiClockwise(){
-        this.direction = (this.direction - 1 + 4) % 4;
-    }
-
     private void followSign(int direction, Actor actor) {
-        Sign sign = (Sign) actor;
+        NonLivingActor sign = (NonLivingActor) actor;
         if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
             this.setDirection(direction);
         }
     }
 
+    public void renderStatus(){
+        if (this.carrying) {
+            this.status.drawString("carrying", this.getX(), this.getY());
+        }
+
+        if (this.consuming) {
+            this.status.drawString("consuming", this.getX(), this.getY());
+        }
+    }
 
     @Override
     public void update() {
+
         if (this.active) {
             switch (this.direction) {
                 case UP:
@@ -114,7 +114,7 @@ public class Thief extends Actor{
             }
 
             if (actor.type.equals("GoldenTree")) {
-                GoldenTree goldenTree = (GoldenTree) actor;
+                Tree goldenTree = (Tree) actor;
                 if (this.getX() == goldenTree.getX() && this.getY() == goldenTree.getY()) {
                     this.consuming = false;
                     this.carrying = true;
@@ -122,7 +122,7 @@ public class Thief extends Actor{
             }
 
             if (actor.type.equals("Pad")) {
-                Pad pad = (Pad) actor;
+                NonLivingActor pad = (NonLivingActor) actor;
                 if (this.getX() == pad.getX() && this.getY() == pad.getY()) {
                     this.consuming = true;
                 }
@@ -136,11 +136,11 @@ public class Thief extends Actor{
                             this.carrying = true;
                             this.consuming = false;
                             stockpile.setFruit(stockpile.getFruit() - 1);
-                            this.moveClockwise();
+                            this.rotateNinetyClockwise();
                         }
 
                     } else {
-                        this.moveClockwise();
+                        this.rotateNinetyClockwise();
                     }
                 }
             }
@@ -155,15 +155,13 @@ public class Thief extends Actor{
                                 this.carrying = true;
                                 hoard.setFruit(hoard.getFruit() - 1);
                             } else {
-                                this.moveClockwise();
+                                this.rotateNinetyClockwise();
                             }
                         }
 
                     } else if (this.carrying) {
                         // rotate direction by 90 degree clockwise
-
-                        this.moveClockwise();
-
+                        this.rotateNinetyClockwise();
                         hoard.setFruit(hoard.getFruit() + 1);
                         this.carrying = false;
 
@@ -173,7 +171,7 @@ public class Thief extends Actor{
 
             if (actor.type.equals("Gatherer")) {
                 Gatherer gatherer = (Gatherer) actor;
-                if(this.getX() == gatherer.getX() && this.getY() == gatherer.getY() && !gatherer.isActive()) {
+                if(this.getX() == gatherer.getX() && this.getY() == gatherer.getY() && gatherer.isActive()) {
                     this.rotateTwoSeventy(this.getDirection());
                 }
             }
@@ -197,7 +195,7 @@ public class Thief extends Actor{
 
         for (Actor actor : ShadowLife.actorList) {
             if (actor.type.equals("Fence")) {
-                Fence fence = (Fence) actor;
+                NonLivingActor fence = (NonLivingActor) actor;
                 if (this.getX() == fence.getX()) {
 
                     if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.TILE_SIZE) {
@@ -221,9 +219,5 @@ public class Thief extends Actor{
 
             }
         }
-
     }
-
-
-
 }

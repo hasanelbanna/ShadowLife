@@ -16,8 +16,8 @@ public class Pool extends Actor {
                         Math.abs(gatherer.getY() - this.getY()) <= 10) {
 
                     Gatherer clone = new Gatherer(gatherer.getX(), gatherer.getY(), gatherer.getDirection());
-                    clone.moveClockwise();
-                    gatherer.moveAntiClockwise();
+                    clone.rotateNinetyClockwise();
+                    gatherer.rotateNinetyAntiClockwise();
                     ShadowLife.actorList.add(clone);
                     ShadowLife.addToTotalGatherers();
                     break;
@@ -30,8 +30,8 @@ public class Pool extends Actor {
                         Math.abs(thief.getY() - this.getY()) <= 10) {
 
                     Thief clone = new Thief(thief.getX(), thief.getY(), thief.getDirection());
-                    clone.moveClockwise();
-                    thief.moveAntiClockwise();
+                    clone.rotateNinetyClockwise();
+                    thief.rotateNinetyAntiClockwise();
                     ShadowLife.actorList.add(clone);
                     ShadowLife.addToTotalThieves();
                     break;
@@ -40,31 +40,4 @@ public class Pool extends Actor {
         }
     }
 }
-
-        //clone Gatherer if inside Pool
-//        for (Gatherer gatherer : ShadowLife.gathererArrayList) {
-//            if (Math.abs(gatherer.getX() - this.getX()) <= 10 &&
-//                    Math.abs(gatherer.getY() - this.getY()) <= 10) {
-//
-//                Gatherer clone = new Gatherer(gatherer.getX(), gatherer.getY(), gatherer.getDirection());
-//                clone.moveClockwise();
-//                gatherer.moveAntiClockwise();
-//                ShadowLife.gathererArrayList.add(clone);
-//                break;
-//            }
-//        }
-
-
-//        for (Thief thief : ShadowLife.thiefArrayList) {
-//            if (Math.abs(thief.getX() - this.getX()) <= 10 &&
-//                    Math.abs(thief.getY() - this.getY()) <= 10) {
-//
-//                Thief clone = new Thief(thief.getX(), thief.getY(), thief.getDirection());
-//                clone.moveClockwise();
-//                thief.moveAntiClockwise();
-//                ShadowLife.thiefArrayList.add(clone);
-//                break;
-//            }
-//        }
-//    }
 

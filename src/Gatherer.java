@@ -2,7 +2,7 @@
  * Part of the code was taken from the solution provided for Project 1.
  */
 
-public class Gatherer extends Actor {
+public class Gatherer extends Actor implements Movable {
     public static final String TYPE = "Gatherer";
     private int direction;
     private boolean carrying = false;
@@ -12,19 +12,18 @@ public class Gatherer extends Actor {
     private final int DOWN = 2;
     private final int LEFT = 3;
 
-
-
     public Gatherer(int x, int y) {
         super("res/images/gatherer.png", TYPE, x, y);
         this.direction = LEFT;
     }
+
     public Gatherer(int x, int y, int direction) {
         super("res/images/gatherer.png", TYPE, x, y);
         this.direction = direction;
     }
 
     public boolean isActive() {
-        return this.active;
+        return !this.active;
     }
 
     public void setDirection(int direction){
@@ -35,11 +34,11 @@ public class Gatherer extends Actor {
         return this.direction;
     }
 
-    public void moveClockwise(){
+    public void rotateNinetyClockwise(){
         this.direction = (this.direction + 1) % 4;
     }
 
-    public void moveAntiClockwise(){
+    public void rotateNinetyAntiClockwise(){
         this.direction = (this.direction - 1 + 4) % 4;
     }
 
@@ -56,12 +55,11 @@ public class Gatherer extends Actor {
     }
 
     private void followSign(int direction, Actor actor) {
-        Sign sign = (Sign) actor;
+        NonLivingActor sign = (NonLivingActor) actor;
         if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
             this.setDirection(direction);
         }
     }
-
 
     @Override
     public void update() {
@@ -96,7 +94,7 @@ public class Gatherer extends Actor {
             }
 
             if (actor.type.equals("GoldenTree")) {
-                GoldenTree goldenTree = (GoldenTree) actor;
+                Tree goldenTree = (Tree) actor;
                 if (this.getX() == goldenTree.getX() && this.getY() == goldenTree.getY()) {
                     this.carrying = true;
                 }
@@ -146,7 +144,7 @@ public class Gatherer extends Actor {
 
         for (Actor actor : ShadowLife.actorList) {
             if (actor.type.equals("Fence")) {
-                Fence fence = (Fence) actor;
+                NonLivingActor fence = (NonLivingActor) actor;
                 if(this.getX() == fence.getX()){
 
                     if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.TILE_SIZE) {
@@ -171,9 +169,5 @@ public class Gatherer extends Actor {
             }
 
         }
-
-
-
-
     }
 }

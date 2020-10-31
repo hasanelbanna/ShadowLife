@@ -12,6 +12,7 @@ public class Hoard extends Actor {
         this.showFruit = new Font("res/conformable.otf", 30);
 
     }
+
     public int getFruit() {
         return fruit;
     }
@@ -19,7 +20,6 @@ public class Hoard extends Actor {
     public void setFruit(int fruit) {
         this.fruit = fruit;
     }
-
 
     @Override
     public void update() {

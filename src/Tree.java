@@ -4,15 +4,16 @@
 
 import bagel.*;
 public class Tree extends Actor {
-    public static final String TYPE = "Tree";
+    public static final String TYPE_TREE = "Tree";
+    public static final String TYPE_Golden_Tree = "GoldenTree";
     private int x;
     private int y;
     private int fruit;
     private Font showFruit;
 
-    public Tree(int x, int y) {
+    public Tree(String imageLocation, String TYPE, int x, int y) {
 
-        super("res/images/tree.png", TYPE, x, y);
+        super(imageLocation, TYPE, x, y);
         this.x = x;
         this.y = y;
         this.fruit = 3;
@@ -33,6 +34,8 @@ public class Tree extends Actor {
      */
     @Override
     public void update() {
-        this.showFruit.drawString( String.valueOf(this.fruit), this.x, this.y);
+        if (this.type.equals("Tree")) {
+            this.showFruit.drawString(String.valueOf(this.fruit), this.x, this.y);
+        }
     }
 }
