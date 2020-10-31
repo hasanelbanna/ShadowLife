@@ -3,7 +3,7 @@ import bagel.Font;
 public class Hoard extends Actor {
     public static final String TYPE = "Hoard";
     private int fruit;
-    private Font showFruit;
+    private final Font showFruit;
 
     public Hoard(int x, int y) {
 

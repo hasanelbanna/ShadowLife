@@ -3,7 +3,7 @@ import bagel.Font;
 public class Stockpile extends Actor {
     public static final String TYPE = "Stockpile";
     private int fruit;
-    private Font showFruit;
+    private final Font showFruit;
 
     public Stockpile(int x, int y) {
 
