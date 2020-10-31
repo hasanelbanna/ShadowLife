@@ -43,6 +43,8 @@ public class ShadowLife extends AbstractGame {
     /**
      * Below are the arraylists that was used in the Dynamic actors movement
      */
+
+    public static ArrayList<Actor> actorList = new ArrayList<>();
     public static ArrayList<GoldenTree> goldenTreeArrayList = new ArrayList<>();
     public static ArrayList<Pad> padArrayList = new ArrayList<>();
     public static ArrayList<Thief> thiefArrayList = new ArrayList<>();
@@ -65,10 +67,7 @@ public class ShadowLife extends AbstractGame {
         MAX_TICKS = maxTicks;
     }
 
-    /**
-     * Read the actors and creates corresponding objects from a csv file
-     * provided via command line arguments along with tick rates and maximum numbers of tick.
-     */
+
     private void loadActors() {
         int count = 0;
 
@@ -98,56 +97,75 @@ public class ShadowLife extends AbstractGame {
                 switch (type) {
                     case Tree.TYPE:
                         treeArrayList.add(new Tree(x,y));
-                        count++;
+                        actorList.add(new Tree(x,y));
                         break;
                     case GoldenTree.TYPE:
                         goldenTreeArrayList.add(new GoldenTree(x, y));
-                        actors[count++] = new GoldenTree(x, y);
+                        actorList.add(new GoldenTree(x,y));
                         break;
                     case Stockpile.TYPE:
                         stockpileArrayList.add(new Stockpile(x, y));
-                        count++;
+                        //actorList.add(new Stockpile(x,y));
                         break;
                     case Hoard.TYPE:
                         hoardArrayList.add(new Hoard(x, y));
-                        count++;
+                       // count++;
+
+                        //actorList.add(new Hoard(x,y));
                         break;
                     case Pad.TYPE:
                         padArrayList.add(new Pad(x, y));
-                        actors[count++] = new Pad(x, y);
+                        //actors[count++] = new Pad(x, y);
+
+                        actorList.add(new Pad(x,y));
                         break;
                     case Fence.TYPE:
-                        actors[count++] = new Fence(x, y);
+                        //actors[count++] = new Fence(x, y);
                         fences.add(new Fence(x, y));
+
+                        actorList.add(new Fence(x,y));
                         break;
                     case SignLeft.TYPE:
-                        actors[count++] = new SignLeft(x, y);
+                        //actors[count++] = new SignLeft(x, y);
                         signLeftArrayList.add(new SignLeft(x, y));
+
+                        actorList.add(new SignLeft(x,y));
                         break;
                     case SignRight.TYPE:
-                        actors[count++] = new SignRight(x, y);
+                        //actors[count++] = new SignRight(x, y);
                         signRightArrayList.add(new SignRight(x,y));
+
+                        actorList.add(new SignRight(x,y));
                         break;
                     case SignUp.TYPE:
-                        actors[count++] = new SignUp(x, y);
+                        //actors[count++] = new SignUp(x, y);
                         signUpArrayList.add(new SignUp(x,y));
+
+                        actorList.add(new SignUp(x,y));
                         break;
                     case SignDown.TYPE:
-                        actors[count++] = new SignDown(x, y);
+                        //actors[count++] = new SignDown(x, y);
                         signDownArrayList.add(new SignDown(x,y));
+
+                        actorList.add(new SignDown(x,y));
                         break;
                     case Pool.TYPE:
-                        actors[count++] = new Pool(x, y);
+                        //actors[count++] = new Pool(x, y);
+
+                        actorList.add(new Pool(x,y));
                         break;
                     case Gatherer.TYPE:
-                        count++;
+                        //count++;
                         totalGathererActive++;
                         gathererArrayList.add(new Gatherer(x, y));
+
+                        //actorList.add(new Gatherer(x,y));
                         break;
                     case Thief.TYPE:
                         thiefArrayList.add(new Thief(x, y));
                         totalThiefActive++;
-                        count++;
+
+                        //actorList.add(new Thief(x,y));
                         break;
                 }
             }
@@ -161,10 +179,6 @@ public class ShadowLife extends AbstractGame {
         loadActors();
     }
 
-    /** Update the state of the game for each ticks and render them on the screen.
-     *
-     * @param input
-     */
     @Override
     protected void update(Input input) {
         // Halt the simulation as the dynamic actors reaches the fence
@@ -211,17 +225,15 @@ public class ShadowLife extends AbstractGame {
 
         // Draw all the actors, the number of fruits and thief's status
         background.drawFromTopLeft(0, 0);
-        for (Actor actor : actors) {
-            if (actor != null) {
+        for (Actor actor : actorList) {
+            if(actor.type.equals("Tree")){
                 actor.render();
+                actor.update();
             }
+            actor.render();
+
         }
-        for (Tree tree : treeArrayList){
-            if (tree != null) {
-                tree.render();
-                tree.update();
-            }
-        }
+
         for (Stockpile stock : stockpileArrayList){
             if (stock != null) {
                 stock.render();
@@ -247,10 +259,7 @@ public class ShadowLife extends AbstractGame {
         }
     }
 
-    /** Run the simulation and print the number of ticks and the total fruits on each stockpiles or hoards
-     *
-     * @param args command line arguments (ignored)
-     */
+
     public static void main(String[] args) {
         new ShadowLife().run();
         int tickToPrint = 1;
@@ -272,10 +281,7 @@ public class ShadowLife extends AbstractGame {
         }
     }
 
-    /** Deals with particular bug in MacOS that prevents the program to read the command line arguments.
-     *
-     * @return the command line arguments
-     */
+
     private static String[] argsFromFile() {
         try {
             return Files.readString(Path.of("args.txt"), Charset.defaultCharset()) .split(" ");
@@ -284,9 +290,7 @@ public class ShadowLife extends AbstractGame {
         return null;
     }
 
-    /** A helper method to exit the code in case of wrong command line input.
-     *
-     */
+
     private static void exitShadowLife() {
         System.out.println("usage: ShadowLife <tick rate> <max ticks> <world file>");
         System.exit(-1);

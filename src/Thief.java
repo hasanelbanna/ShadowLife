@@ -132,12 +132,16 @@ public class Thief extends Actor{
             }
         }
 
-        for (Tree tree : ShadowLife.treeArrayList) {
-            if (this.getX() == tree.getX() && this.getY() == tree.getY() && !this.carrying) {
-                if (tree.getFruit() > 0) {
-                    tree.setFruit(tree.getFruit() - 1);
-                    this.carrying = true;
+        for (Actor actor : ShadowLife.actorList) {
+            if (actor.type.equals("Tree")) {
+                Tree tree = (Tree) actor;
+                if (this.getX() == tree.getX() && this.getY() == tree.getY() && !this.carrying) {
+                    if (tree.getFruit() > 0) {
+                        tree.setFruit(tree.getFruit() - 1);
+                        this.carrying = true;
+                    }
                 }
+
             }
         }
 

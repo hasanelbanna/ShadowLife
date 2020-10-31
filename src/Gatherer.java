@@ -95,17 +95,20 @@ public class Gatherer extends Actor {
             }
         }
 
+        for (Actor actor : ShadowLife.actorList) {
+            if (actor.type.equals("Tree")) {
+                Tree tree = (Tree) actor;
+                if (this.getX() == tree.getX() && this.getY() == tree.getY() && !this.carrying) {
+                    if (tree.getFruit() > 0) {
+                        tree.setFruit(tree.getFruit() - 1);
+                        this.carrying = true;
+                        this.rotateOneEighty(this.getDirection());
 
-        for (Tree tree : ShadowLife.treeArrayList) {
-            if (this.getX() == tree.getX() && this.getY() == tree.getY() && !this.carrying) {
-                if (tree.getFruit() > 0) {
-                    tree.setFruit(tree.getFruit() - 1);
-                    this.carrying = true;
-                    this.rotateOneEighty(this.getDirection());
-
+                    }
                 }
             }
         }
+
 
         for (Stockpile stockpile : ShadowLife.stockpileArrayList) {
             if(this.getX() == stockpile.getX() && this.getY() == stockpile.getY()) {
