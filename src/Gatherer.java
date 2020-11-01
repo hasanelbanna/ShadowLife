@@ -1,7 +1,7 @@
 /**
  * Part of the code was taken from the solution provided for Project 1.
  */
-
+import java.util.ArrayList;
 public class Gatherer extends Actor implements Movable {
     public static final String TYPE = "Gatherer";
     private int direction;
@@ -11,6 +11,7 @@ public class Gatherer extends Actor implements Movable {
     private final int RIGHT = 1;
     private final int DOWN = 2;
     private final int LEFT = 3;
+    private boolean onPool = false;
 
     public Gatherer(int x, int y) {
         super("res/images/gatherer.png", TYPE, x, y);
@@ -24,6 +25,10 @@ public class Gatherer extends Actor implements Movable {
 
     public boolean isActive() {
         return !this.active;
+    }
+
+    public boolean isOnPool() {
+        return onPool;
     }
 
     public void setDirection(int direction){
@@ -66,21 +71,21 @@ public class Gatherer extends Actor implements Movable {
         if (this.active) {
             switch (this.direction) {
                 case UP:
-                    move(0, -ShadowLife.TILE_SIZE);
+                    move(0, -ShadowLife.getTileSize());
                     break;
                 case DOWN:
-                    move(0, ShadowLife.TILE_SIZE);
+                    move(0, ShadowLife.getTileSize());
                     break;
                 case LEFT:
-                    move(-ShadowLife.TILE_SIZE, 0);
+                    move(-ShadowLife.getTileSize(), 0);
                     break;
                 case RIGHT:
-                    move(ShadowLife.TILE_SIZE, 0);
+                    move(ShadowLife.getTileSize(), 0);
                     break;
             }
         }
 
-        for (Actor actor : ShadowLife.actorList) {
+        for (Actor actor : ShadowLife.getActorList()) {
             if (actor.type.equals("Tree")) {
                 Tree tree = (Tree) actor;
                 if (this.getX() == tree.getX() && this.getY() == tree.getY() && !this.carrying) {
@@ -124,6 +129,14 @@ public class Gatherer extends Actor implements Movable {
                 }
             }
 
+            if (actor.type.equals("Pool")) {
+                NonLivingActor pool = (NonLivingActor) actor;
+                if(this.getX() == pool.getX() && this.getY() == pool.getY()) {
+                    ShadowLife.setTotalGathererActive(ShadowLife.getTotalGathererActive() - 1);
+                    this.onPool = true;
+                }
+            }
+
             if (actor.type.equals("SignLeft")) {
                 this.followSign(LEFT, actor);
             }
@@ -142,26 +155,30 @@ public class Gatherer extends Actor implements Movable {
 
         }
 
-        for (Actor actor : ShadowLife.actorList) {
+        for (Actor actor : ShadowLife.getActorList()) {
             if (actor.type.equals("Fence")) {
                 NonLivingActor fence = (NonLivingActor) actor;
                 if(this.getX() == fence.getX()){
 
-                    if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.TILE_SIZE) {
+                    if (this.getDirection() == UP && (this.getY() - fence.getY()) == ShadowLife.getTileSize()) {
                         this.active = false;
+                        ShadowLife.setTotalGathererActive(ShadowLife.getTotalGathererActive() - 1);
                         break;
-                    } else if(this.getDirection() == DOWN && (fence.getY() - this.getY()) == ShadowLife.TILE_SIZE) {
+                    } else if(this.getDirection() == DOWN && (fence.getY() - this.getY()) == ShadowLife.getTileSize()) {
                         this.active = false;
+                        ShadowLife.setTotalGathererActive(ShadowLife.getTotalGathererActive() - 1);
                         break;
                     }
                 } else if (this.getY() == fence.getY()) {
 
-                    if(this.getDirection() == RIGHT && (fence.getX() - this.getX()) == ShadowLife.TILE_SIZE) {
+                    if(this.getDirection() == RIGHT && (fence.getX() - this.getX()) == ShadowLife.getTileSize()) {
                         this.active = false;
+                        ShadowLife.setTotalGathererActive(ShadowLife.getTotalGathererActive() - 1);
                         break;
                     }
-                    if(this.getDirection() == LEFT && (this.getX() - fence.getX()) == ShadowLife.TILE_SIZE) {
+                    if(this.getDirection() == LEFT && (this.getX() - fence.getX()) == ShadowLife.getTileSize()) {
                         this.active = false;
+                        ShadowLife.setTotalGathererActive(ShadowLife.getTotalGathererActive() - 1);
                         break;
                     }
                 }
@@ -169,5 +186,6 @@ public class Gatherer extends Actor implements Movable {
             }
 
         }
+
     }
 }
