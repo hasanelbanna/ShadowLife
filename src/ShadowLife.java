@@ -1,11 +1,11 @@
-/*
+/**
  * Project 2B for Object Oriented Software Development(SWEN20003).
  *
  * Acknowledgement goes to Eleanor McMurty who designed the simulation and
- * provided the sample solution for Project 1 for continuation of ShadowLife.
+ * provided the sample solution to Project 1 for continuation of ShadowLife.
  *
- * @author Sheikh Hasan Al Banna Ohi, October, 2020.
- * @studentID 1118853
+ * @author Hasan Al Banna Ohi (studentID 1118853), October, 2020.
+ * @version 14.0.2
  */
 
 import bagel.AbstractGame;
@@ -21,7 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-/**
+/*
  * Main class for the game.
  * Reading from Command-Line arguments and Renders the actors.
  */
@@ -41,7 +41,7 @@ public class ShadowLife extends AbstractGame {
     private static int totalThiefActive = 0;
     private static int thiefTicks = 0;
     private final Image background = new Image("res/images/background.png");
-    private static ArrayList<Actor> actorList = new ArrayList<>();
+    private static final ArrayList<Actor> actorList = new ArrayList<>();
 
     public static int getTotalThiefActive() {
         return totalThiefActive;
@@ -143,6 +143,11 @@ public class ShadowLife extends AbstractGame {
         loadActors();
     }
 
+    /**
+     * Update the state of the game, potentially reading from input
+     *
+     * @param input The current state based on the tick
+     */
     @Override
     protected void update(Input input) {
 
@@ -299,7 +304,14 @@ public class ShadowLife extends AbstractGame {
         }
     }
 
-
+    /**
+     * Main method for the simulation.
+     *
+     * Creates the simulation and runs it. Reads three command line arguments: tick length, max ticks and the simulation
+     * world file. Also prints the status of ticks and fruits.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         new ShadowLife().run();
         int tickToPrint = 1;
@@ -331,7 +343,6 @@ public class ShadowLife extends AbstractGame {
         }
     }
 
-
     private static String[] argsFromFile() {
         try {
             return Files.readString(Path.of("args.txt"), Charset.defaultCharset()) .split(" ");
@@ -340,7 +351,6 @@ public class ShadowLife extends AbstractGame {
         }
         return null;
     }
-
 
     private static void exitShadowLife() {
         System.out.println("usage: ShadowLife <tick rate> <max ticks> <world file>");

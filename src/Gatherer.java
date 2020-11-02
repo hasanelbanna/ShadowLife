@@ -1,52 +1,97 @@
 /**
- * Part of the code was taken from the solution provided for Project 1.
+ * Gather is a dynamic actor that collects fruit from trees and stocks them at stockpiles or hoards
  */
-import java.util.ArrayList;
 public class Gatherer extends Actor implements Movable {
+
+    /* type of the actor */
     public static final String TYPE = "Gatherer";
+    /* direction of the gatherer and initial value of the four directions*/
     private int direction;
-    private boolean carrying = false;
-    private boolean active = true;
     private final int UP = 0;
     private final int RIGHT = 1;
     private final int DOWN = 2;
     private final int LEFT = 3;
+    /* status of the gatherer */
+    private boolean carrying = false;
+    private boolean active = true;
     private boolean onPool = false;
 
+    /**
+     * Constructs a gatherer and initialises the position in the simulation world
+     *
+     * @param x x coordinate
+     * @param y x coordinate
+     */
     public Gatherer(int x, int y) {
         super("res/images/gatherer.png", TYPE, x, y);
         this.direction = LEFT;
     }
 
+    /**
+     * Constructs a gatherer and initialises the position and direction in the simulation world
+     *
+     * @param x x coordinate
+     * @param y x coordinate
+     * @param direction initial direction
+     */
     public Gatherer(int x, int y, int direction) {
         super("res/images/gatherer.png", TYPE, x, y);
         this.direction = direction;
     }
 
+    /**
+     * method to check if the gatherer is active
+     *
+     * @return inverted active status
+     */
     public boolean isActive() {
         return !this.active;
     }
 
+    /**
+     * method to check if the gatherer is standing on a pool
+     *
+     * @return true if on the pool
+     */
     public boolean isOnPool() {
         return onPool;
     }
 
+    /**
+     * method to change the direction
+     *
+     * @param direction new direction
+     */
     public void setDirection(int direction){
         this.direction = direction;
     }
 
+    /**
+     * get the current direction of the gatherer
+     *
+     * @return current direction
+     */
     public int getDirection(){
         return this.direction;
     }
 
+    /**
+     * change the current direction to 90 degree clockwise
+     */
     public void rotateNinetyClockwise(){
         this.direction = (this.direction + 1) % 4;
     }
 
+    /**
+     * change the current direction to 90 degree anticlockwise
+     */
     public void rotateNinetyAntiClockwise(){
         this.direction = (this.direction - 1 + 4) % 4;
     }
 
+    /**
+     * change the current direction to 180 degree
+     */
     private void rotateOneEighty(int direction) {
         if (direction == RIGHT) {
             this.setDirection(LEFT);
@@ -59,6 +104,12 @@ public class Gatherer extends Actor implements Movable {
         }
     }
 
+    /**
+     * method that forces the gatherer to follow the sign changing the direction when it stands upon it
+     *
+     * @param direction current direction
+     * @param actor actor
+     */
     private void followSign(int direction, Actor actor) {
         NonLivingActor sign = (NonLivingActor) actor;
         if (this.getX() == sign.getX() && this.getY() == sign.getY()) {
@@ -66,6 +117,9 @@ public class Gatherer extends Actor implements Movable {
         }
     }
 
+    /**
+     * changes the state of the gatherer
+     */
     @Override
     public void update() {
         if (this.active) {
