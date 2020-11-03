@@ -1,1 +1,1 @@
-200 100 res/worlds/infinite-gun-1.csv
+80 1000 res/worlds/product.csv

@@ -11,7 +11,7 @@ public abstract class Actor {
     private int y;
     /* image of the actor */
     private final Image image;
-    /* type of the actor */
+    /* Classification of the actor */
     public final String type;
 
     /**
@@ -23,7 +23,7 @@ public abstract class Actor {
      * @param y y coordinate
      */
     public Actor(String filename, String type, int x, int y) {
-        image = new Image(filename);
+        this.image = new Image(filename);
         this.type = type;
         this.x = x;
         this.y = y;
