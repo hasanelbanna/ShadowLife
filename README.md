@@ -18,7 +18,7 @@ Making their life dificult is the thief who aims to steal fruit from the stockpi
 and once they all reach their final goals (the fence), the simulation halts. 
 
 They are quite industrious workers, with enough time, they could calculate anything that any computer can!
-To watch the demo simulation on YouTube click [this link](https://youtu.be/x2hx7rPrTVg)
+To watch the demo simulation on YouTube click [this link](https://youtu.be/x2hx7rPrTVg).
 
 
 #### Run the simulation 
