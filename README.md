@@ -1,4 +1,10 @@
 # ShadowLife
+
+The purpose of this project is to: 
+• gain experience working with an object-oriented programming language (Java) using OOP principles. 
+• introduce fundamental game programming concepts (2D graphics, timing, geometric calculations) 
+• gain experience writing software using an external library (Bagel)
+
 ## Description of the simulation
 
 "Shadow Life is a graphical simulation of a world inhabited by creatures called gatherers. Their purpose in life is to gather fruit from the trees, and deposit them at stockpiles. Once they have gathered all the fruit from their trees, they rest in front of fences.
@@ -8,6 +14,14 @@ The behaviour of the simulation is entirely determined by the world file loaded 
 
 ---
 
+## Demo Simulation 
+To watch the demo simulation on YouTube click [this link](https://youtu.be/x2hx7rPrTVg)
+---
+## Run the sumilation 
+1. Clone repository 
+2. Open in IntelliJ or any other IDE you use for Java as a project
+3. Add bagel.jar file under "lib" folder as project library 
+4. Run the ShadowLife.java file to view the simulation
 
-The initial commit is the exact copy of the version I submitted for assessment. 
-While preparing for the final exam, I redesigned some files using advanced data structures and rest of the OOP principles. 
+(Optional: there are other simulation worlds provided in res/worlds folder. To view the simulation in a different world:
+Open args.txt file -> replace 'product' with desired world -> save -> Run ShadowLife.java)
