@@ -12,9 +12,6 @@ Making their life dificult is the thief who aims to steal fruit from the stockpi
 
 The behaviour of the simulation is entirely determined by the world file loaded when the Shadow Life program starts: each gatherer, thief, and other element begins at a specified location and follows a set of rules to determine their behaviour. Once all gatherers and thieves have reached a fence, the simulation halts, and the amount of fruit at each stockpile and hoard is tallied up. The simulation proceeds in ticks, with the tick rate (time between ticks) determined by a command- line parameter. If more than a maximum number of ticks (also determined by a command-line parameter) pass before halting, the simulation times out. Otherwise, the number of elapsed ticks, together with the amounts of fruit at each location, is printed to form the result of the world file."
 
----
-
-## Demo Simulation 
 To watch the demo simulation on YouTube click [this link](https://youtu.be/x2hx7rPrTVg)
 ---
 ## Run the sumilation 
