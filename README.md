@@ -1,6 +1,6 @@
 # ShadowLife
 
-####The purpose of this project is to: 
+#### The purpose of this project is to: 
 
     • Gain experience working with an object-oriented programming language (Java) using OOP principles. 
 
